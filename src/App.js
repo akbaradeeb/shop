@@ -8,6 +8,8 @@ import Footer from './components/Common/Footer';
 import Home from './components/Pages/Home/Home';
 import Product from './components/Pages/Catalog/Product';
 import ProductDetail from './components/Pages/Catalog/ProductDetail';
+import Cart from './components/Pages/Checkout/Cart';
+import Wishlist from './components/Pages/Wishlist/Wishlist';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
               <Route exact path='/' component={ Home } />
               <Route exact path='/product' component={ Product } />
               <Route exact path='/product-detail' component={ ProductDetail } />
+              <Route exact path='/cart' component={ Cart } />
+              <Route exact path='/wishlist' component={ Wishlist } />
         </Switch>
         </Router> 
        <Footer/>     
