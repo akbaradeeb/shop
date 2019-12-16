@@ -1,10 +1,27 @@
 import React,{ Component } from 'react';
 
 class Account extends Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            visible:false,
+        }
+    }
+
+    showHideAccount = () => {
+        const currentState = this.state.visible;
+        this.setState({ visible: !currentState });
+    };
+
     render() {
+
+        let account_class = "searchbar__content setting__block ";
+        account_class+= this.state.visible === true ? "is-visible" : "";
+
         return (
-            <li class="setting__bar__icon"><a class="setting__active" href="#"></a>
-            <div class="searchbar__content setting__block">
+            <li class="setting__bar__icon"><a class="setting__active" href="#" onClick={this.showHideAccount}></a>
+            <div className={account_class}>
             <div class="content-inner">
                 <div class="switcher-currency">
                 <strong class="label switcher-label">

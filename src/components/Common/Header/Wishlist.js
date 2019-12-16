@@ -4,7 +4,7 @@ class Wishlist extends Component{
     render() {
         return (
              
-                <li class="wishlist"><a href="#"></a></li>
+        <li class="wishlist"><a href="#">{this.props.wishlist}</a></li>
              
             
         );

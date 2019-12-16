@@ -2,30 +2,74 @@ import React,{ Component } from 'react';
 import Product from './ProductList/Product';
 import Filter from './ProductList/Filter';
 import Toolbar from './ProductList/Toolbar';
-import Pagination from './ProductList/Pagination';
+import Pagination from './ProductList/Pagination'; 
+import axios from 'axios';
+import MainContext from "../../../context/MainContext";
+import ProvideCombinedContext from "../../../context/ProvideCombinedContext"; 
 
 class ProductList extends Component{
-
-	state = {
-		product:[
-			{id:1},
-			{id:2},
-			{id:3},
-			{id:4},
-			{id:5},
-			{id:6},
-			{id:7},
-			{id:8},
-			{id:9},
-			{id:10},
-			{id:11},
-			{id:12},
-		]
+	
+	static contextType = MainContext;
+	static alert;
+	
+	constructor(props) {
+		super(props);
+		this.state = {
+					  product:[],
+					  pagination:{pages:[],current_page:1},
+					  records:{
+								start:0,
+								end:0,
+								total:0
+					  		  }
+					 }; 
 	} 
 
-    render() {
-        return (
+	componentDidMount(){ 
+		this.alert = this.context; 
+		this.callApi(1);
 
+		console.log("ProductList");
+		console.log(this.context); 
+	}
+
+	handlePageChange = (pageId) => {
+		 
+		this.callApi(pageId)
+	}
+
+	handleAddToCart = (product) => {
+		const obj = {product_id:product.product_id};
+
+		axios.post('http://localhost/opencart/api/add-to-cart.php',obj)
+			 .then(res=>{
+				 console.log(res.data)
+				 this.context.user.fetchMinicart(); 	
+				 this.context.alert.setAlert('Product Added TO Cart','success'); 	   
+				});
+	}
+
+	handleWishlist = (product) => {
+		const obj = {product_id:product.product_id};
+
+		axios.post('http://localhost/opencart/api/add-to-wishlist.php',obj)
+			 .then(res=>{
+				console.log(res.data);
+				this.alert.setAlert('Product added to the wishlist','success');
+				
+			 });
+	}
+
+	callApi = (pageId) =>{
+		axios.get('http://localhost/opencart/api/products.php?page='+pageId)
+			 .then(response => {
+					this.setState({ product: response.data.products, pagination:response.data.pagination,records:response.data.records }); 
+			 }); 			   
+	}
+
+    render() {console.log(this.state);	
+        return (
+			
             <React.Fragment>
                 <div class="ht__bradcaump__area bg-image--6">
                     <div class="container">
@@ -53,15 +97,21 @@ class ProductList extends Component{
         				<Filter/>
         			</div>
         			<div class="col-lg-9 col-12 order-1 order-lg-2">
-        				<Toolbar/>
+        				<Toolbar records={this.state.records}/>
         				<div class="tab__container">
 	        				<div class="shop-grid tab-pane fade show active" id="nav-grid" role="tabpanel">
 	        					<div class="row">
-	        						{ this.state.product.map(product=><Product key={product.id}/>)}
+	        						{ this.state.product.map(product=>
+										<Product key={product.id} 
+												 product={product} 
+												 onAddToCart={this.handleAddToCart}
+												 onAddToWishlist={this.handleWishlist}
+												 />
+									)}
 	        						 
 	        					</div>
 	        					
-								<Pagination/>
+								<Pagination onPageChange={this.handlePageChange} pagination={this.state.pagination} />
 	        				</div>
 	        				 
         				</div>
@@ -75,4 +125,12 @@ class ProductList extends Component{
     }
 }
 
-export default ProductList;
+const WrappedProductList = props => {
+    return (
+      <ProvideCombinedContext>
+        <ProductList {...props} />
+      </ProvideCombinedContext>
+    );
+  };
+   
+export default WrappedProductList;

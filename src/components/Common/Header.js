@@ -4,13 +4,29 @@ import Wishlist from './Header/Wishlist';
 import Minicart from './Header/Minicart';
 import Account from './Header/Account';
 import Menu from './Header/Menu';
+import Alert from './../Common/Alert';
+
+import MainContext from "../../context/MainContext";
+import ProvideCombinedContext from "../../context/ProvideCombinedContext";
 
 class Header extends Component{
+
+    static contextType = MainContext;
+
+    constructor(props)
+    {
+        super(props);
+    }
+
+    componentDidMount(){ 
+        this.context.user.fetchMinicart(); 
+	} 
 
     render() {
         return (
              
                 <header id="wn__header" class="header__area header__absolute sticky__header">
+                     
                     <div class="container-fluid">
                         <div class="row">
                         <div class="col-md-6 col-sm-6 col-6 col-lg-2">
@@ -25,7 +41,7 @@ class Header extends Component{
                             <ul class="header__sidebar__right d-flex justify-content-end align-items-center">
                             <Search/>
                             <Wishlist/>
-                            <Minicart/>
+                            <Minicart main = {this.context} />
                             <Account/>
                             </ul>
                         </div>
@@ -74,12 +90,27 @@ class Header extends Component{
                         
                             <div class="mobile-menu d-block d-lg-none">
                             </div>
-                            
-                    </div>		
-                    </header>
+
+                              
+                    </div>	
+
+                    <div class="col-md-12 col-sm-12 col-12 col-lg-12">
+                     <Alert/>
+                    </div>   	
+                </header>
+
+                  
      
         );
     }
 }
 
-export default Header;
+const WrappedHeader = props => {
+    return (
+      <ProvideCombinedContext>
+        <Header {...props} />
+      </ProvideCombinedContext>
+    );
+  };
+   
+export default WrappedHeader;
