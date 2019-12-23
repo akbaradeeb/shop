@@ -27,10 +27,7 @@ class ProductList extends Component{
 
 	componentDidMount(){ 
 		this.alert = this.context; 
-		this.callApi(1);
-
-		console.log("ProductList");
-		console.log(this.context); 
+		this.callApi(1); 
 	}
 
 	handlePageChange = (pageId) => {
@@ -55,8 +52,9 @@ class ProductList extends Component{
 		axios.post('http://localhost/opencart/api/add-to-wishlist.php',obj)
 			 .then(res=>{
 				console.log(res.data);
-				this.alert.setAlert('Product added to the wishlist','success');
-				
+				this.context.alert.setAlert('Product added to the wishlist','success');
+				this.context.user.fetchMinicart(); 	
+				this.context.alert.setAlert('Product Added TO Wishlist','success'); 
 			 });
 	}
 

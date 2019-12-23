@@ -1,51 +1,84 @@
 import React,{ Component } from 'react';
+import he from 'he'
+import axios from 'axios';
+import MainContext from "../../../context/MainContext";
+import ProvideCombinedContext from "../../../context/ProvideCombinedContext"; 
+import Gallery from './ProductDetail/Gallery';
 
 class ProductDetail extends Component{
-    render() {
-        return (
-              <React.Fragment>
+	static contextType = MainContext;
+	constructor(props) {
+		super(props);
+		this.state = {product:{product_id:0,details:{description:''}}}; 
+	} 
 
-                  <div class="ht__bradcaump__area bg-image--4">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="bradcaump__inner text-center">
-                        	<h2 class="bradcaump-title">Shop Single</h2>
-                            <nav class="bradcaump-content">
-                              <a class="breadcrumb_item" href="index.html">Home</a>
-                              <span class="brd-separetor">/</span>
-                              <span class="breadcrumb_item active">Shop Single</span>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+	componentDidMount(){
+		let product_id = this.props.match.params.product_id;
+		axios.get('http://localhost/opencart/api/product-detail.php?product_id='+product_id)
+			 .then(response => {
+					this.setState({ product: response.data.product}); 
+			 });
+	}
+
+	handleAddToCart = (product) => {
+		const obj = {product_id:product.product_id};
+
+		axios.post('http://localhost/opencart/api/add-to-cart.php',obj)
+			 .then(res=>{
+				 console.log(res.data)
+				 this.context.user.fetchMinicart(); 	
+				 this.context.alert.setAlert('Product Added TO Cart','success'); 	   
+				});
+	}
+
+	handleWishlist = (product) => {
+		const obj = {product_id:product.product_id};
+
+		axios.post('http://localhost/opencart/api/add-to-wishlist.php',obj)
+			 .then(res=>{
+				console.log(res.data);
+				this.context.alert.setAlert('Product added to the wishlist','success');
+				this.context.user.fetchMinicart(); 	
+				this.context.alert.setAlert('Product Added TO Wishlist','success'); 
+			 });
+	}
+
+    render() {
+		let product = this.state.product;
+		 
+        return (
+		 <React.Fragment>
+		   
+		  <div class="ht__bradcaump__area bg-image--4">
+			<div class="container">	
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="bradcaump__inner text-center">
+							<h2 class="bradcaump-title">{product.name}</h2>
+							<nav class="bradcaump-content">
+								<a class="breadcrumb_item" href="index.html">Home</a>
+								<span class="brd-separetor">/</span>
+								<span class="breadcrumb_item active">{product.name}</span>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+		  </div>
         
         
-        <div class="maincontent bg--white pt--80 pb--55">
+          <div class="maincontent bg--white pt--80 pb--55">
         	<div class="container">
         		<div class="row">
-        			<div class="col-lg-9 col-12">
+        			<div class="col-lg-12 col-12">
         				<div class="wn__single__product">
         					<div class="row">
         						<div class="col-lg-6 col-12">
-        							<div class="wn__fotorama__wrapper">
-	        							<div class="fotorama wn__fotorama__action" data-nav="thumbs">
-		        							  <a href="1.jpg"><img src="images/product/1.jpg" alt=""/></a>
-		        							  <a href="2.jpg"><img src="images/product/2.jpg" alt=""/></a>
-		        							  <a href="3.jpg"><img src="images/product/3.jpg" alt=""/></a>
-		        							  <a href="4.jpg"><img src="images/product/4.jpg" alt=""/></a>
-		        							  <a href="5.jpg"><img src="images/product/5.jpg" alt=""/></a>
-		        							  <a href="6.jpg"><img src="images/product/6.jpg" alt=""/></a>
-		        							  <a href="7.jpg"><img src="images/product/7.jpg" alt=""/></a>
-		        							  <a href="8.jpg"><img src="images/product/8.jpg" alt=""/></a>
-	        							</div>
-        							</div>
+        							<Gallery/>
         						</div>
         						<div class="col-lg-6 col-12">
         							<div class="product__info__main">
-        								<h1>Chaz Kangeroo Hoodie</h1>
+        								<h1>{product.name}</h1>
         								<div class="product-reviews-summary d-flex">
         									<ul class="rating-summary d-flex">
     											<li><i class="zmdi zmdi-star-outline"></i></li>
@@ -56,7 +89,7 @@ class ProductDetail extends Component{
         									</ul>
         								</div>
         								<div class="price-box">
-        									<span>$52.00</span>
+        									<span>${product.price}</span>
         								</div>
 										<div class="product__overview">
         									<p>Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.</p>
@@ -66,10 +99,14 @@ class ProductDetail extends Component{
         									<span>Qty</span>
         									<input id="qty" class="input-text qty" name="qty" min="1" value="1" title="Qty" type="number"/>
         									<div class="addtocart__actions">
-        										<button class="tocart" type="submit" title="Add to Cart">Add to Cart</button>
+        										<button class="tocart" type="submit" title="Add to Cart"
+													onClick={() => this.handleAddToCart(product)} 
+												>Add to Cart</button>
         									</div>
 											<div class="product-addto-links clearfix">
-												<a class="wishlist" href="#"></a>
+												<a class="wishlist" href="#"
+													onClick={() => this.handleWishlist(product)} 
+												></a>
 												<a class="compare" href="#"></a>
 											</div>
         								</div>
@@ -117,12 +154,7 @@ class ProductDetail extends Component{
 	                        	
 	                        	<div class="pro__tab_label tab-pane fade show active" id="nav-details" role="tabpanel">
 									<div class="description__attribute">
-										<p>Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.</p>
-										<ul>
-											<li>• Two-tone gray heather hoodie.</li>
-											<li>• Drawstring-adjustable hood. </li>
-											<li>• Machine wash/dry.</li>
-										</ul>
+									{ he.decode(product.details.description) }
 									</div>
 	                        	</div>
 	                        	
@@ -694,90 +726,26 @@ class ProductDetail extends Component{
 							</div>
 						</div>
         			</div>
-        			<div class="col-lg-3 col-12 md-mt-40 sm-mt-40">
-        				<div class="shop__sidebar">
-        					<aside class="wedget__categories poroduct--cat">
-        						<h3 class="wedget__title">Product Categories</h3>
-        						<ul>
-        							<li><a href="#">Biography <span>(3)</span></a></li>
-        							<li><a href="#">Business <span>(4)</span></a></li>
-        							<li><a href="#">Cookbooks <span>(6)</span></a></li>
-        							<li><a href="#">Health & Fitness <span>(7)</span></a></li>
-        							<li><a href="#">History <span>(8)</span></a></li>
-        							<li><a href="#">Mystery <span>(9)</span></a></li>
-        							<li><a href="#">Inspiration <span>(13)</span></a></li>
-        							<li><a href="#">Romance <span>(20)</span></a></li>
-        							<li><a href="#">Fiction/Fantasy <span>(22)</span></a></li>
-        							<li><a href="#">Self-Improvement <span>(13)</span></a></li>
-        							<li><a href="#">Humor Books <span>(17)</span></a></li>
-        							<li><a href="#">Harry Potter <span>(20)</span></a></li>
-        							<li><a href="#">Land of Stories <span>(34)</span></a></li>
-        							<li><a href="#">Kids' Music <span>(60)</span></a></li>
-        							<li><a href="#">Toys & Games <span>(3)</span></a></li>
-        							<li><a href="#">hoodies <span>(3)</span></a></li>
-        						</ul>
-        					</aside>
-        					<aside class="wedget__categories pro--range">
-        						<h3 class="wedget__title">Filter by price</h3>
-        						<div class="content-shopby">
-        						    <div class="price_filter s-filter clear">
-        						        <form action="#" method="GET">
-        						            <div id="slider-range"></div>
-        						            <div class="slider__range--output">
-        						                <div class="price__output--wrap">
-        						                    <div class="price--output">
-        						                        <span>Price :</span><input type="text" id="amount" readonly=""/>
-        						                    </div>
-        						                    <div class="price--filter">
-        						                        <a href="#">Filter</a>
-        						                    </div>
-        						                </div>
-        						            </div>
-        						        </form>
-        						    </div>
-        						</div>
-        					</aside>
-        					<aside class="wedget__categories poroduct--compare">
-        						<h3 class="wedget__title">Compare</h3>
-        						<ul>
-        							<li><a href="#">x</a><a href="#">Condimentum posuere</a></li>
-        							<li><a href="#">x</a><a href="#">Condimentum posuere</a></li>
-        							<li><a href="#">x</a><a href="#">Dignissim venenatis</a></li>
-        						</ul>
-        					</aside>
-        					<aside class="wedget__categories poroduct--tag">
-        						<h3 class="wedget__title">Product Tags</h3>
-        						<ul>
-        							<li><a href="#">Biography</a></li>
-        							<li><a href="#">Business</a></li>
-        							<li><a href="#">Cookbooks</a></li>
-        							<li><a href="#">Health & Fitness</a></li>
-        							<li><a href="#">History</a></li>
-        							<li><a href="#">Mystery</a></li>
-        							<li><a href="#">Inspiration</a></li>
-        							<li><a href="#">Religion</a></li>
-        							<li><a href="#">Fiction</a></li>
-        							<li><a href="#">Fantasy</a></li>
-        							<li><a href="#">Music</a></li>
-        							<li><a href="#">Toys</a></li>
-        							<li><a href="#">Hoodies</a></li>
-        						</ul>
-        					</aside>
-        					<aside class="wedget__categories sidebar--banner">
-								<img src="images/others/banner_left.jpg" alt="banner images"/>
-								<div class="text">
-									<h2>new products</h2>
-									<h6>save up to <br/> <strong>40%</strong>off</h6>
-								</div>
-        					</aside>
-        				</div>
-        			</div>
+        			
+        				 
         		</div>
         	</div>
         </div>
-              </React.Fragment>
-        );
+         
+		 </React.Fragment>
+		
+			
+		);
     }
 } 
 
-export default ProductDetail;
+
+const WrappedProductDetail = props => {
+    return (
+      <ProvideCombinedContext>
+        <ProductDetail {...props} />
+      </ProvideCombinedContext>
+    );
+  };
+   
+export default WrappedProductDetail; 

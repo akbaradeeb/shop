@@ -32,7 +32,7 @@ class Header extends Component{
                         <div class="col-md-6 col-sm-6 col-6 col-lg-2">
                             <div class="logo">
                             <a href="index.html">
-                                <img src="images/logo/logo.png" alt="logo images"/>
+                                <img src="/images/logo/logo.png" alt="logo images"/>
                             </a>
                             </div>
                         </div>
@@ -40,7 +40,7 @@ class Header extends Component{
                         <div class="col-md-6 col-sm-6 col-6 col-lg-2">
                             <ul class="header__sidebar__right d-flex justify-content-end align-items-center">
                             <Search/>
-                            <Wishlist/>
+                            <Wishlist wishlist = {this.context.user.user.wishlist}/>
                             <Minicart main = {this.context} />
                             <Account/>
                             </ul>

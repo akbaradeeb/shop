@@ -1,4 +1,5 @@
 import React,{ Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Product extends Component{
     
@@ -10,14 +11,14 @@ class Product extends Component{
         return (
             <div class="product product__style--3 col-lg-4 col-md-4 col-sm-6 col-12">
             <div class="product__thumb">
-                <a class="first__img" href="single-product.html"><img src={product.image} alt="product images"/></a>
-                <a class="second__img animation1" href="single-product.html"><img src={product.image} alt="product images"/></a>
+                <Link to={"/product-detail/"+product.product_id} ><img src={product.image} alt="product images"/></Link>
+                <Link to={"/product-detail/"+product.product_id} className="second__img animation1" href="single-product.html"><img src={product.image} alt="product images"/></Link>
                 <div class="hot__box">
                     <span class="hot-label">BEST SALLER</span>
                 </div>
             </div>
             <div class="product__content content--center">
-        <h4><a href="single-product.html">{product.name}</a></h4>
+        <h4><Link to={"/product-detail/"+product.product_id} >{product.name}</Link></h4>
                 <ul class="prize d-flex">
                     <li>${product.price}</li>
                     <li class="old_prize">${product.price}</li>
