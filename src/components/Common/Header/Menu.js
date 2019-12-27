@@ -6,8 +6,8 @@ class Menu extends Component{
             <div class="col-lg-8 d-none d-lg-block">
             <nav class="mainmenu__nav">
             <ul class="meninmenu d-flex justify-content-start">
-                <li class="drop with--one--item"><a href="index.html">Home</a></li>
-                <li class="drop"><a href="#">Shop</a>
+                <li class="drop with--one--item"><a href="/">Home</a></li>
+                <li class="drop"><a href="/product">Shop</a>
                 <div class="megamenu mega03">
                     <ul class="item item03">
                     <li class="title">Shop Layout</li>

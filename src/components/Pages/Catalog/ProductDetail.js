@@ -9,7 +9,7 @@ class ProductDetail extends Component{
 	static contextType = MainContext;
 	constructor(props) {
 		super(props);
-		this.state = {product:{product_id:0,details:{description:''}}}; 
+		this.state = {product:{product_id:0,details:{description:''},images:[]}}; 
 	} 
 
 	componentDidMount(){
@@ -74,7 +74,7 @@ class ProductDetail extends Component{
         				<div class="wn__single__product">
         					<div class="row">
         						<div class="col-lg-6 col-12">
-        							<Gallery/>
+        							<Gallery product={product} />
         						</div>
         						<div class="col-lg-6 col-12">
         							<div class="product__info__main">

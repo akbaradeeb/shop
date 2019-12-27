@@ -47,18 +47,18 @@ class Minicart extends Component{
                 <span>$66.00</span>
                 </div>
                 <div class="mini_action checkout">
-                <a class="checkout__btn" href="cart.html">Go to Checkout</a>
+                <a class="checkout__btn" href="/checkout">Go to Checkout</a>
                 </div>
                 <div class="single__items">
                 <div class="miniproduct">
                 {this.props.main.user.user.cart.items.map(item=>
                     <div class="item01 d-flex">
                     <div class="thumb">
-                        <a href="product-details.html"><img src="images/product/sm-img/1.jpg" alt="product images"/></a>
+                        <a href="product-details.html"><img src={item.image} alt="product images"/></a>
                     </div>
                     <div class="content">
-                        <h6><a href="product-details.html">Voyage Yoga Bag</a></h6>
-                        <span class="prize">$30.00</span>
+                        <h6><a href="product-details.html">{item.name}</a></h6>
+                        <span class="prize">${item.price}</span>
                         <div class="product_prize d-flex justify-content-between">
                         <span class="qun">Qty: {item.quantity}</span>
                         <ul class="d-flex justify-content-end">
@@ -72,7 +72,7 @@ class Minicart extends Component{
                 </div>
                 </div>
                 <div class="mini_action cart">
-                <a class="cart__btn" href="cart.html">View and edit cart</a>
+                <a class="cart__btn" href="/cart">View and edit cart</a>
                 </div>
             </div>
             </div>
