@@ -10,7 +10,7 @@ import ProductList from './components/Pages/Catalog/ProductList';
 import ProductDetail from './components/Pages/Catalog/ProductDetail';
 import Cart from './components/Pages/Checkout/Cart';
 import Wishlist from './components/Pages/Wishlist/Wishlist';
-
+import Checkout from './components/Pages/Checkout/Onepage';
 
 import AlertState from './context/alert/AlertState';
 import UserState from './context/user/UserState';
@@ -41,6 +41,7 @@ class App extends Component {
                   <Route exact path='/product-detail/:product_id' component={ ProductDetail } />
                   <Route exact path='/cart' component={ Cart } />
                   <Route exact path='/wishlist' component={ Wishlist } />
+                  <Route exact path='/checkout' component={ Checkout } />
             </Switch>
             </Router> 
             <Footer/>

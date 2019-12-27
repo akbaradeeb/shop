@@ -1,6 +1,50 @@
 import React,{ Component } from 'react';
+import MainContext from "../../../context/MainContext";
+import ProvideCombinedContext from "../../../context/ProvideCombinedContext";  
+import axios from 'axios';
 
 class Wishlist extends Component{
+    static contextType = MainContext;
+
+    constructor(props)
+    {
+        super(props);
+        this.state = {wishlist:[]};
+    }
+
+    componentDidMount(){
+        axios.get('http://localhost/opencart/api/wishlist.php')
+			 .then(response => {
+					this.setState({ wishlist: response.data }); 
+			 }); 
+    }
+
+    deleteItem = (item) =>{
+        const obj = {product_id:item.product_id};
+		axios.post('http://localhost/opencart/api/remove-wishlist-item.php',obj)
+			 .then(res=>{
+                        this.context.user.fetchMinicart(); 
+                        this.context.alert.setAlert('Product Deleted from wishlist','success');
+                        
+                        axios.get('http://localhost/opencart/api/wishlist.php')
+                        .then(response => {
+                                this.setState({ wishlist: response.data }); 
+                        }); 
+                  });
+    }
+
+    handleAddToCart = (product) => {
+		const obj = {product_id:product.product_id};
+
+		axios.post('http://localhost/opencart/api/add-to-cart.php',obj)
+			 .then(res=>{
+				 console.log(res.data)
+				 this.context.user.fetchMinicart(); 	
+                 this.context.alert.setAlert('Product Added TO Cart','success'); 	
+                 
+				});
+	}
+
     render() {
         return (
              <React.Fragment>
@@ -40,30 +84,16 @@ class Wishlist extends Component{
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td class="product-remove"><a href="#">×</a></td>
-                                                            <td class="product-thumbnail"><a href="#"><img src="images/product/sm-3/1.jpg" alt=""/></a></td>
-                                                            <td class="product-name"><a href="#">Natoque penatibus</a></td>
-                                                            <td class="product-price"><span class="amount">$165.00</span></td>
-                                                            <td class="product-stock-status"><span class="wishlist-in-stock">In Stock</span></td>
-                                                            <td class="product-add-to-cart"><a href="#"> Add to Cart</a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="product-remove"><a href="#">×</a></td>
-                                                            <td class="product-thumbnail"><a href="#"><img src="images/product/sm-3/2.jpg" alt=""/></a></td>
-                                                            <td class="product-name"><a href="#">Quisque fringilla</a></td>
-                                                            <td class="product-price"><span class="amount">$50.00</span></td>
-                                                            <td class="product-stock-status"><span class="wishlist-in-stock">In Stock</span></td>
-                                                            <td class="product-add-to-cart"><a href="#"> Add to Cart</a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="product-remove"><a href="#">×</a></td>
-                                                            <td class="product-thumbnail"><a href="#"><img src="images/product/sm-3/3.jpg" alt=""/></a></td>
-                                                            <td class="product-name"><a href="#">Quisque fringilla</a></td>
-                                                            <td class="product-price"><span class="amount">$65.00</span></td>
-                                                            <td class="product-stock-status"><span class="wishlist-in-stock">In Stock</span></td>
-                                                            <td class="product-add-to-cart"><a href="#"> Add to Cart</a></td>
-                                                        </tr>
+                                                        { this.state.wishlist.map(item=>
+                                                            <tr>
+                                                                <td class="product-remove"><a href="#" onClick={() => this.deleteItem(item)}>×</a></td>
+                                                                <td class="product-thumbnail"><a href="#"><img src={item.image} alt="" width="100px"/></a></td>
+                                                                <td class="product-name"><a href="#">{item.name}</a></td>
+                                                                <td class="product-price"><span class="amount">${item.price}</span></td>
+                                                                <td class="product-stock-status"><span class="wishlist-in-stock">In Stock</span></td>
+                                                                <td class="product-add-to-cart"><a href="#" onClick={() => this.handleAddToCart(item)}>Add to Cart</a></td>
+                                                            </tr>
+                                                        )} 
                                                     </tbody>
                                                 </table>
                                             </div>  
@@ -78,4 +108,12 @@ class Wishlist extends Component{
     }
 }
 
-export default Wishlist;
+const WrappedWishlist = props => {
+    return (
+      <ProvideCombinedContext>
+        <Wishlist {...props} />
+      </ProvideCombinedContext>
+    );
+  };
+   
+export default WrappedWishlist;
