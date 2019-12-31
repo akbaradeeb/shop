@@ -30,6 +30,8 @@ class Minicart extends Component{
         let minicart_class = "block-minicart minicart__active ";
         minicart_class+= this.state.visible === true ? "is-visible" : "";
 
+        let cart = this.props.main.user.user.cart;
+
         return (
             
             <li class="shopcart"><a class="cartbox_active" href="#"><span class="product_qun" onClick={this.showHideCart} >{this.props.main.user.user.cart.total}</span></a>
@@ -40,18 +42,18 @@ class Minicart extends Component{
                  <span>close</span> 
                 </div>
                 <div class="items-total d-flex justify-content-between">
-                <span>0 items</span>
+                <span>{cart.total} items</span>
                 <span>Cart Subtotal</span>
                 </div>
                 <div class="total_amount text-right">
-                <span>$66.00</span>
+                <span>${cart.subtotal}</span>
                 </div>
                 <div class="mini_action checkout">
                 <a class="checkout__btn" href="/checkout">Go to Checkout</a>
                 </div>
                 <div class="single__items">
                 <div class="miniproduct">
-                {this.props.main.user.user.cart.items.map(item=>
+                {cart.items.map(item=>
                     <div class="item01 d-flex">
                     <div class="thumb">
                         <a href="product-details.html"><img src={item.image} alt="product images"/></a>

@@ -11,7 +11,7 @@ import {
 const UserState = props => {
     const initialState = {
         wishlist:0,
-        cart:{items:[],total:1}
+        cart:{items:[],total:0,shipping_charge:0,subtotal:0,grand_total:0}
       };
 
     const [state,dispatch] = useReducer(UserReducer,initialState);

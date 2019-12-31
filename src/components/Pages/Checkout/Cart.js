@@ -21,6 +21,7 @@ class Cart extends Component{
     }
 
     render() {
+        let cart = this.context.user.user.cart;
         return (
              <React.Fragment>
                  <div class="ht__bradcaump__area bg-image--3">
@@ -58,7 +59,7 @@ class Cart extends Component{
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.context.user.user.cart.items.map(item=>
+                                        {cart.items.map(item=>
                                         <tr>
                                             <td class="product-thumbnail"><a href="#"><img src={item.image} alt="product img"/></a></td>
                                             <td class="product-name"><a href="#">{item.name}</a></td>
@@ -87,17 +88,17 @@ class Cart extends Component{
                         <div class="cartbox__total__area">
                             <div class="cartbox-total d-flex justify-content-between">
                                 <ul class="cart__total__list">
-                                    <li>Cart total</li>
-                                    <li>Sub Total</li>
+                                    <li>Sub total</li>
+                                    <li>Shipping Charge</li>
                                 </ul>
                                 <ul class="cart__total__tk">
-                                    <li>$70</li>
-                                    <li>$70</li>
+                                    <li>${cart.subtotal}</li>
+                                    <li>${cart.shipping_charge}</li>
                                 </ul>
                             </div>
                             <div class="cart__total__amount">
                                 <span>Grand Total</span>
-                                <span>$140</span>
+                                <span>${cart.grand_total}</span>
                             </div>
                         </div>
                     </div>
