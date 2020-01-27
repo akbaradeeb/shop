@@ -11,6 +11,7 @@ import ProductDetail from './components/Pages/Catalog/ProductDetail';
 import Cart from './components/Pages/Checkout/Cart';
 import Wishlist from './components/Pages/Wishlist/Wishlist';
 import Checkout from './components/Pages/Checkout/Onepage';
+import Success  from './components/Pages/Checkout/Success';
 
 import AlertState from './context/alert/AlertState';
 import UserState from './context/user/UserState';
@@ -33,8 +34,9 @@ class App extends Component {
       <div class="wrapper" id="wrapper">
          <UserState>
           <AlertState>
+          <Router basename="/shop">  
           <Header/>
-          <Router>
+          
           <Switch>
                   <Route exact path='/' component={ Home } />
                   <Route exact path='/product' component={ ProductList } />
@@ -42,9 +44,11 @@ class App extends Component {
                   <Route exact path='/cart' component={ Cart } />
                   <Route exact path='/wishlist' component={ Wishlist } />
                   <Route exact path='/checkout' component={ Checkout } />
+                  <Route exact path='/success'  component={ Success } />
             </Switch>
-            </Router> 
+            
             <Footer/>
+            </Router> 
             </AlertState>
           </UserState>        
       </div>

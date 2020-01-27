@@ -1,5 +1,6 @@
 import React,{ Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class Minicart extends Component{ 
     
@@ -49,7 +50,7 @@ class Minicart extends Component{
                 <span>${cart.subtotal}</span>
                 </div>
                 <div class="mini_action checkout">
-                <a class="checkout__btn" href="/checkout">Go to Checkout</a>
+                <Link to={`${process.env.PUBLIC_URL}/checkout`} className="checkout__btn">Go to Checkout</Link>  
                 </div>
                 <div class="single__items">
                 <div class="miniproduct">
@@ -74,7 +75,7 @@ class Minicart extends Component{
                 </div>
                 </div>
                 <div class="mini_action cart">
-                <a class="cart__btn" href="/cart">View and edit cart</a>
+                <Link to={`${process.env.PUBLIC_URL}/cart`} className="cart__btn">View and edit cart</Link>
                 </div>
             </div>
             </div>

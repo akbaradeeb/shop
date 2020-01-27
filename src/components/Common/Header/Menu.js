@@ -1,4 +1,5 @@
 import React,{ Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Menu extends Component{
     render() {
@@ -7,7 +8,7 @@ class Menu extends Component{
             <nav class="mainmenu__nav">
             <ul class="meninmenu d-flex justify-content-start">
                 <li class="drop with--one--item"><a href="/">Home</a></li>
-                <li class="drop"><a href="/product">Shop</a>
+                <li class="drop"> <Link to={`${process.env.PUBLIC_URL}/product`} >Shop</Link>
                 <div class="megamenu mega03">
                     <ul class="item item03">
                     <li class="title">Shop Layout</li>

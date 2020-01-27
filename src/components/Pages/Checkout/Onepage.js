@@ -58,7 +58,7 @@ class Onepage extends Component{
                         }; 
             axios.post('http://localhost/opencart/api/place-order.php',obj)
              .then(res=>{
-                    alert(res.data.msg);
+                        this.props.history.push('/success');
                  
                 });  
 
