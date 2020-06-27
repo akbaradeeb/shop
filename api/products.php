@@ -12,7 +12,7 @@ $total  = $data['total'];
 
 
 $stmt   = $DB->prepare("SELECT p.*,d.name as name FROM `oc_product` as p 
-						INNER JOIN oc_product_description as d d.product_id = p.product_id
+						INNER JOIN oc_product_description as d ON d.product_id = p.product_id
 						WHERE 1=1");
 $stmt->execute();
 $data   = $stmt->fetchAll();
