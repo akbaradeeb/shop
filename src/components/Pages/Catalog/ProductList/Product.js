@@ -11,7 +11,7 @@ class Product extends Component{
         return (
             <div class="product product__style--3 col-lg-4 col-md-4 col-sm-6 col-12">
             <div class="product__thumb">
-                <Link to={"/product-detail/"+product.product_id} ><img src={product.image} alt="product images"/></Link>
+                <Link to={"/product-detail/"+product.product_id} ><img src={product.image} alt="product images" /></Link>
                 <Link to={"/product-detail/"+product.product_id} className="second__img animation1" href="single-product.html"><img src={product.image} alt="product images"/></Link>
                 <div class="hot__box">
                     <span class="hot-label">BEST SALLER</span>
